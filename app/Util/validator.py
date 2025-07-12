@@ -2,7 +2,7 @@ from password_validator import PasswordValidator
 from email_validator import EmailNotValidError,validate_email 
 from fastapi.responses import JSONResponse
 from fastapi import status
-from hash import Hash
+from .hash import Hash
 
 check_valid=PasswordValidator()
 check_valid \
