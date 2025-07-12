@@ -1,5 +1,5 @@
 from .databases import Base
-from sqlalchemy import String,Integer,ForeignKey,Column
+from sqlalchemy import String,Integer,ForeignKey,Column,DateTime
 from sqlalchemy.orm import Relationship
 from datetime import datetime
 
@@ -18,4 +18,4 @@ class Password_reset(Base):
     id=Column(Integer,primary_key=True,index=True)
     code=Column(Integer)
     email=Column(String,index=True)
-    expiry_at=Column(datetime)
+    expiry_at=Column(DateTime)
