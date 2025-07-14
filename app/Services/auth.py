@@ -38,7 +38,7 @@ def signup(request,db:Session):
         db.refresh(user)
         return JSONResponse(
             status_code=status.HTTP_200_OK,
-            content=jsonable_encoder({
+            content={
                      "messsage":"signup sucussful",
                      "Token":create_access_token(data={
                             "user_id":user.id,
@@ -47,7 +47,7 @@ def signup(request,db:Session):
                             }
                         ),
                      "Token_type":"Bearer"
-                    })
+                    }
         )
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
