@@ -10,7 +10,7 @@ def send_email(code,receiver_email):
 
 
     msg=EmailMessage()
-    msg["From"]=formataddr("Libraconnect",my_email)
+    msg["From"]=formataddr(("Libraconnect",my_email))
     msg["To"]=receiver_email
     msg["subject"]="Password reset"
     msg.set_content(f"Here is your reset code {code},This code will expire in 1 minute")
