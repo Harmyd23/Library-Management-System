@@ -67,7 +67,7 @@ def login(request,db:Session):
             content={"message":"Email does not exist"}
         )
     Hasher=Hash()
-    password_match=Hasher.verify_pas(request.password,user.password)
+    password_match=Hasher.verify_pas(request.Password,user.password)
     if not password_match:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
