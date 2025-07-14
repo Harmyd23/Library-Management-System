@@ -8,7 +8,7 @@ class User(Base):
     id=Column(Integer,primary_key=True,index=True)
     user_id=Column(String)
     fullname=Column(String)
-    phone_number=Column(Integer)
+    phone_number=Column(String)
     email=Column(String)
     department=Column(String)
     password=Column(String)
