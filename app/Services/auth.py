@@ -7,43 +7,72 @@ from ..Util.hash import Hash
 from ..Util.Token import create_access_token
 from ..Util import Generate_user_id
 
-def signup(request,db:Session):
+def signup(request, db: Session):
+    print(" signup() called")
 
-    fullname= request.Fullname.strip().lower()
-    Email_validation=valid_email(request.Email.strip().lower())
-    #check if email is valid and return the err if not valid
-    if isinstance(Email_validation,JSONResponse):
+    fullname = request.Fullname.strip().lower()
+    print(" Email:", request.Email)
+
+    Email_validation = valid_email(request.Email.strip().lower())
+    if isinstance(Email_validation, JSONResponse):
+        print(" Invalid email")
         return Email_validation
-    email=Email_validation
-    #check if password is valid and return err if not valid 
-    password_validation=valid_password(request.Password)
-    if isinstance (password_validation,JSONResponse):
-        return password_validation
-    hashed_password=password_validation
+    email = Email_validation
 
-    #check if email exists
-    email_Check=db.query(User).filter(User.email==email).first()
+    password_validation = valid_password(request.Password)
+    if isinstance(password_validation, JSONResponse):
+        print(" Invalid password")
+        return password_validation
+    hashed_password = password_validation
+
+    print(" Checking email in DB")
+    email_Check = db.query(User).filter(User.email == email).first()
+    print(" Email check done")
+
     if email_Check:
+        print(" Email exists")
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message":"email exists"}
+            content={"message": "email exists"}
         )
-    user_Id=Generate_user_id.generate_unique_id(db)
+
+    print(" Generating user ID")
+    user_Id = Generate_user_id.generate_unique_id(db)
+    print(" ID:", user_Id)
+
     try:
-        user=User(fullname=request.Fullname,user_id=user_Id,phone_number=request.Phone_number,email=email,department=request.Department,password=hashed_password)
+        print(" Creating user object")
+        user = User(
+            fullname=request.Fullname,
+            user_id=user_Id,
+            phone_number=request.Phone_number,
+            email=email,
+            department=request.Department,
+            password=hashed_password
+        )
+        print(" Adding user to session")
         db.add(user)
+        print(" Committing to DB")
         db.commit()
         db.refresh(user)
+        print(" Signup complete")
+
         return JSONResponse(
             status_code=status.HTTP_200_OK,
             content={
-                     "messsage":"signup sucussful",
-                     "Token":create_access_token(data={"user_id":user.id,"user_name":user.fullname,"email":user.email}),
-                     "Token_type":"Bearer"
-                    }
+                "message": "signup successful",
+                "Token": create_access_token(data={
+                    "user_id": user.id,
+                    "user_name": user.fullname,
+                    "email": user.email
+                }),
+                "Token_type": "Bearer"
+            }
         )
+
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
+        print(" EXCEPTION:", e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
 def login(request,db:Session):

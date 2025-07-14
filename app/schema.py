@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class User(BaseModel):
     Fullname:str
-    Phone_number:int
+    Phone_number:str
     Email:str
     Password:str
     Department:str
