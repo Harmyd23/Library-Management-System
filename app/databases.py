@@ -9,6 +9,7 @@ Sessionlocal=sessionmaker(autoflush=False,autocommit=False,bind=engine)
 Base=declarative_base()
 
 def get_db():
+    print("get_db is called")
     db=Sessionlocal()
     try:
         yield db
