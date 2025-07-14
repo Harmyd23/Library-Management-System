@@ -37,7 +37,8 @@ def signup(request, db: Session):
         )
 
     print(" Generating user ID")
-    user_Id = Generate_user_id.generate_unique_id(db)
+    #user_Id = Generate_user_id.generate_unique_id(db)
+    user_Id="Stu123"
     print(" ID:", user_Id)
 
     try:
