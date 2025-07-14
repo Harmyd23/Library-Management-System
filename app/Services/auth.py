@@ -6,6 +6,7 @@ from ..models import User
 from ..Util.hash import Hash
 from ..Util.Token import create_access_token
 from ..Util import Generate_user_id
+from fastapi.encoders import jsonable_encoder
 
 def signup(request,db:Session):
 
@@ -37,7 +38,7 @@ def signup(request,db:Session):
         db.refresh(user)
         return JSONResponse(
             status_code=status.HTTP_200_OK,
-            content={
+            content=jsonable_encoder({
                      "messsage":"signup sucussful",
                      "Token":create_access_token(data={
                             "user_id":user.id,
@@ -46,7 +47,7 @@ def signup(request,db:Session):
                             }
                         ),
                      "Token_type":"Bearer"
-                    }
+                    })
         )
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))

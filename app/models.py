@@ -12,6 +12,7 @@ class User(Base):
     email=Column(String)
     department=Column(String)
     password=Column(String)
+    created_at=Column(DateTime,default=datetime.utcnow())
 
 class Password_reset(Base):
     __tablename__="reset_code"
