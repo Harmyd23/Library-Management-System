@@ -17,6 +17,6 @@ class User(Base):
 class Password_reset(Base):
     __tablename__="reset_code"
     id=Column(Integer,primary_key=True,index=True)
-    code=Column(Integer)
+    code=Column(String)
     email=Column(String,index=True)
     expiry_at=Column(DateTime)
