@@ -29,8 +29,8 @@ def signup(request,db:Session):
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"message":"email exists"}
         )
-    #user_Id=Generate_user_id.generate_unique_id(db)
-    user_Id="Stu123"
+    user_Id=Generate_user_id.generate_unique_id(db)
+    #user_Id="Stu123"
     try:
         user=User(fullname=request.Fullname,user_id=user_Id,phone_number=request.Phone_number,email=email,department=request.Department,password=hashed_password)
         db.add(user)

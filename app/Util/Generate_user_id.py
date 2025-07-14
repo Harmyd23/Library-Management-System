@@ -11,7 +11,7 @@ def generate_unique_id(db:Session,prefix="Stu"):
         try:
             user_Id=generate_user_id(4)
             #check if it exists in the db
-            check_id=db.query(User).filter(User.user_id==user_Id)
+            check_id=db.query(User).filter(User.user_id==user_Id).first()
             if not check_id:
                 return user_Id
         except Exception as e:
