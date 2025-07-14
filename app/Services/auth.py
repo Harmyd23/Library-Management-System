@@ -9,7 +9,7 @@ from ..Util import Generate_user_id
 
 def signup(request,db:Session):
 
-    fullname= request.Fullname.strip().lowercase()
+    fullname= request.Fullname.strip().lower()
     Email_validation=valid_email(request.Email.strip().lower())
     #check if email is valid and return the err if not valid
     if isinstance(Email_validation,JSONResponse):
