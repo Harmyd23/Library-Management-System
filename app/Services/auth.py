@@ -1,3 +1,12 @@
+from ..databases import Session
+from fastapi import status,HTTPException
+from fastapi.responses import JSONResponse
+from ..Util.validator import valid_email,valid_password
+from ..models import User
+from ..Util.hash import Hash
+from ..Util.Token import create_access_token
+from ..Util import Generate_user_id
+
 def signup(request,db:Session):
 
     fullname= request.Fullname.strip().lower()
@@ -19,7 +28,8 @@ def signup(request,db:Session):
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"message":"email exists"}
         )
-    user_Id=Generate_user_id.generate_unique_id(db)
+    #user_Id=Generate_user_id.generate_unique_id(db)
+    user_Id="Stu123"
     try:
         user=User(fullname=request.Fullname,user_id=user_Id,phone_number=request.Phone_number,email=email,department=request.Department,password=hashed_password)
         db.add(user)
@@ -29,10 +39,21 @@ def signup(request,db:Session):
             status_code=status.HTTP_200_OK,
             content={
                      "messsage":"signup sucussful",
-                     "Token":create_access_token(data={"user_id":user.id,"user_name":user.fullname,"email":user.email}),
+                     "Token":create_access_token(data={
+                            "user_id":user.id,
+                            "user_name":user.fullname,
+                            "email":user.email
+                            }
+                        ),
                      "Token_type":"Bearer"
                     }
         )
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
+
+
+
+
+    
+    
 
