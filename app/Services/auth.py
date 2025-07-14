@@ -6,7 +6,6 @@ from ..models import User
 from ..Util.hash import Hash
 from ..Util.Token import create_access_token
 from ..Util import Generate_user_id
-from fastapi.encoders import jsonable_encoder
 
 def signup(request,db:Session):
 
@@ -53,6 +52,37 @@ def signup(request,db:Session):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
 
 
+
+def login(request,db:Session):
+
+    email_check=valid_email(request.Email.strip().lower())
+    if isinstance(email_check,JSONResponse):
+        return email_check
+    email=email_check
+    #check if email exists
+    user=db.query(User).filter(User.email==email).first()
+    if not User:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message":"Email does not exist"}
+        )
+    Hasher=Hash()
+    password_match=Hasher.verify_pas(request.password,user.password)
+    if not password_match:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"message":"Wrong Password"}
+        )
+    else:
+        Token=create_access_token(data={"user_id":user.id,"user_name":user.fullname,"email":user.email})
+        return JSONResponse(
+            status_code=status.HTTP_202_ACCEPTED,
+            content={
+                    "message":"logged in successful",
+                    "Token":Token,
+                    "Token_type":"Bearer"
+                     }
+        )
 
 
     
