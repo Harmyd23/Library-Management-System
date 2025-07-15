@@ -17,8 +17,11 @@ def reset_password(request,db:Session):
                 status_code=status.HTTP_404_NOT_FOUND,
                 content={"message":"User not found"}
             )
-
-        user.password=validator.valid_password(request.Password)
+        password=validator.valid_password(request.Password)
+        if isinstance(password,JSONResponse):
+            return password
+        user.password=password
+        
         db.commit()
         return JSONResponse(
             status_code=status.HTTP_202_ACCEPTED,
