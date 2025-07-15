@@ -38,7 +38,7 @@ def signup(request,db:Session):
         return JSONResponse(
             status_code=status.HTTP_200_OK,
             content={
-                     "messsage":"signup sucussful",
+                     "messsage":"Signup Successful",
                      "Token":create_access_token(data={
                             "user_id":user.id,
                             "user_name":user.fullname,
@@ -78,7 +78,7 @@ def login(request,db:Session):
         return JSONResponse(
             status_code=status.HTTP_202_ACCEPTED,
             content={
-                    "message":"logged in successful",
+                    "message":"Login Successful",
                     "Token":Token,
                     "Token_type":"Bearer"
                      }

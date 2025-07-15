@@ -69,25 +69,25 @@ def verify_reset_code(request,db):
     if  otp.code!=request.Code:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
-            content={"message":"code not match"}
+            content={"message":"Code not match"}
         )
     elif otp.expiry_at < now:
         return JSONResponse(
             status_code=status.HTTP_410_GONE,
-            content={"message":"code expired"}
+            content={"message":"Code Expired"}
         )
     else:
         USER=db.query(User).filter(User.email==Email).first()
         if not USER:
             return JSONResponse(
                 status_code=status.HTTP_404_NOT_FOUND,
-                content={"message":"user does not exist"}
+                content={"message":"User does not exist"}
             )
         token=Token.create_access_token(data={"user_id":USER.id,"user_name":USER.fullname,"email":USER.email})
         return JSONResponse(
             status_code=status.HTTP_200_OK,
             content={
-                     "message":"code verified",
+                     "message":"Code Verified",
                      "Token":token,
                      "Token_type":"Bearer"
                      }
