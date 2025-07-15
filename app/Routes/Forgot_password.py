@@ -14,4 +14,4 @@ def verify_code(request:VerifyCodeRequest,db:Session=Depends(get_db)):
 
 @forgot_password.post("/change_password",status_code=status.HTTP_200_OK)
 def change_password(request:ResetPassword,db:Session=Depends(get_db)):
-    return Reset_code
+    return Reset_password.reset_password(request,db)
