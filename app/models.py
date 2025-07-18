@@ -2,6 +2,7 @@ from .databases import Base
 from sqlalchemy import String,Integer,ForeignKey,Column,DateTime
 from sqlalchemy.orm import Relationship
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import ARRAY
 
 class User(Base):
     __tablename__="users"
@@ -12,7 +13,8 @@ class User(Base):
     email=Column(String)
     department=Column(String)
     password=Column(String)
-    created_at=Column(DateTime,default=datetime.utcnow())
+    role=Column(String,default="Student")
+    created_at=Column(DateTime,default=datetime.utcnow)
 
 class Password_reset(Base):
     __tablename__="reset_code"
@@ -20,3 +22,29 @@ class Password_reset(Base):
     code=Column(String)
     email=Column(String,index=True)
     expiry_at=Column(DateTime)
+
+class Book(Base):
+    __tablename__ ="books"
+    id = Column(Integer,primary_key=True,index=True)
+    google_book_id = Column(String, unique=True)
+    title = Column(String)
+    authors = Column(ARRAY(String))
+    description = Column(String)
+    category=Column(String)
+    copies = Column(Integer, default=10)
+
+
+class Borrowed_books(Base):
+    __tablename__="Borrowed_books"
+    id=Column(Integer,primary_key=True,index=True)
+    user_id=Column(ForeignKey("users.id"))
+    google_book_id=Column(Integer,index=True)
+    title=Column(String,index=True)
+    author=Column(String,index=True)
+    category=Column(String,index=True)
+    borrow_date=Column(DateTime,default=datetime.utcnow)
+    due_date=Column(DateTime)
+    status=Column(String,default="Borrowed")
+
+
+    
