@@ -38,7 +38,7 @@ class Borrowed_books(Base):
     __tablename__="Borrowed_books"
     id=Column(Integer,primary_key=True,index=True)
     user_id=Column(ForeignKey("users.id"))
-    google_book_id=Column(Integer,index=True)
+    google_book_id=Column(String,index=True)
     title=Column(String,index=True)
     author=Column(String,index=True)
     category=Column(String,index=True)
