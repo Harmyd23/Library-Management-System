@@ -4,6 +4,7 @@ from ...databases import Session
 from ...models import User,Book,Borrowed_books
 from fastapi.responses import JSONResponse
 from ...Services.Books import get_user_fav_cat
+from ...Util.config import Api_key
 
 
 def get_all(db:Session,user):
@@ -25,7 +26,8 @@ def get_all(db:Session,user):
                 params={
                 "q":f"subject:{category}",
                 "maxResults": 5,
-                "printType":"Books"
+                "printType":"Books",
+                "key":Api_key
                 }
             )
             req.raise_for_status()
