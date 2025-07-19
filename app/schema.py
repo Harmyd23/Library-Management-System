@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class User(BaseModel):
     Fullname:str
@@ -20,3 +21,11 @@ class VerifyCodeRequest(BaseModel):
 
 class ResetPassword(Login):
     pass
+
+class BorrowBook(BaseModel):
+    Google_id:str
+    Title:str
+    Author:str
+    Category:str
+    
+
