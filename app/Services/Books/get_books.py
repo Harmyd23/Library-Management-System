@@ -15,7 +15,7 @@ def get_all(db:Session,user):
             content={"message":"User not authorized"}
         )
     try:
-        user_cat=get_user_fav_cat(user_id,db)
+        user_cat=get_user_fav_cat.get_user_fav_category(user_id,db)
         books={}
         # for each category in the user's favourite category
         for category in user_cat:
