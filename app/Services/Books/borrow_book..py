@@ -1,7 +1,9 @@
 from ...databases import Session
-from ...models import Borrowed_books
+from ...models import Borrowed_books,Book
 from datetime import datetime,timedelta
 from fastapi import status
+import requests
+from ...Util.config import Api_key
 from fastapi.responses import JSONResponse
 
 def borrowBook(request,db:Session,user):
@@ -11,6 +13,27 @@ def borrowBook(request,db:Session,user):
             status_code=status.HTTP_401_UNAUTHORIZED,
             content={"message":"Not authorized"}
         )
+    #save in my books table if it is not in it
+    book_check=db.query(Book).filter(Book.google_book_id==request.Google_id).first()
+    if not book_check:
+        req=requests.get(
+            f"https://www.googleapis.com/books/v1/volumes/{request.Google_id}",
+            timeout=5,
+            params={
+                "key":Api_key
+            }
+        )
+        book_full_info=req.json()
+        volume_info=book_full_info.get("volumeInfo",{})
+        new_book=Book(google_book_id=request.Google_id,
+                      title=volume_info.get("title"),
+                      authors=volume_info.get("authors",[]),
+                      description=volume_info.get("description"),
+                      category=volume_info.get("categories")
+                      )
+        db.add(new_book)
+        db.commit()
+        db.refresh(new_book)
     #check if this book has been borrowed
     existing = db.query(Borrowed_books).filter(Borrowed_books.user_id==userId,Borrowed_books.google_book_id==request.Google_id).first()
     if existing:

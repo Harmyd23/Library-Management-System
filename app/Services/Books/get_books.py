@@ -81,3 +81,72 @@ def get_all(db:Session,user):
                 "message":str(err)
             }
         )
+
+
+                        #GETTING THE BOOK BY FILTERS
+
+
+def get_by_filter(title,author,genre,user,db:Session):
+    user_id=user["user_id"]
+    current_user=db.query(User).filter(User.id==user_id).first()
+    if not current_user:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content ={"message":"not authorised"}
+        )
+    books={}
+    query=None
+    if title:
+        query=f"intitle:{title}"
+        search=title
+    elif author:
+        query=f"inauthor:{author}"
+        search=author
+    elif genre:
+        query=f"subject:{genre}"
+        search=genre
+    try:
+        req=requests.get(
+            "https://www.googleapis.com/books/v1/volumes",
+            timeout=5,
+            params={
+                "q":query,
+                "maxResults":20,
+                "printType":"Books",
+                "key":Api_key
+            }
+        )
+        #getting the detail of the book
+        needed_attr=[]
+        filtered=req.json().get("items",[])
+        for info in filtered:
+            google_id=info.get("id")
+            volume_info=info.get("volumeInfo",{})
+            #checking if the book exist in my db using the google book id
+            existing = db.query(Book).filter(Book.google_book_id==google_id).first()
+            if existing:
+                book_count= existing.copies
+                borrowed_book_count=db.query(Borrowed_books).filter(Borrowed_books.google_book_id==google_id).count()
+                availability = book_count-borrowed_book_count 
+            needed_attr.append({
+                "google_id":google_id,
+                "title":volume_info.get("title"),
+                "authors":volume_info.get("authors",[]),
+                "category":volume_info.get("categories",[]),
+                "availability":"Available" if not existing or availability>0 else "Unavailable"
+                })
+
+        books[search]=needed_attr
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"message":str(e)}
+        )
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message":"Successfull",
+                 "book":books}
+
+    )
+
+    pass

@@ -1,8 +1,9 @@
-from fastapi import APIRouter,status,Depends
+from fastapi import APIRouter,status,Depends,Query
 from ..databases import Session,get_db
 from ..Util.oauth import decode_token
 from ..schema import BorrowBook
 from ..Services.Books import get_books,borrow_book
+from typing import Optional
 
 Book=APIRouter(prefix="/books")
 
@@ -13,3 +14,11 @@ def get_book(db:Session=Depends(get_db),user=Depends(decode_token)):
 @Book.post("/borrow_book",status_code=status.HTTP_201_CREATED)
 def borrowBOOK(request:BorrowBook,db:Session=Depends(get_db),user=Depends(decode_token)):
     return borrow_book.borrowBook(request,db.user)
+
+@Book.get("/search_book",status_code=status.HTTP_200_OK)
+def search_book(title:Optional[str]=Query(None),
+                author:Optional[str]=Query(None),
+                genre:Optional[str]=Query(None),
+                user=Depends(decode_token),
+                db:Session=Depends(get_db)):
+    return get_books.get_by_filter(title,author,genre,user,db)
