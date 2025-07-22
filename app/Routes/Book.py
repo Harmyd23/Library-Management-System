@@ -13,7 +13,7 @@ def get_book(db:Session=Depends(get_db),user=Depends(decode_token)):
 
 @Book.post("/borrow_book",status_code=status.HTTP_201_CREATED)
 def borrowBOOK(request:BorrowBook,db:Session=Depends(get_db),user=Depends(decode_token)):
-    return borrow_book.borrowBook(request,db.user)
+    return borrow_book.borrowBook(request,db,user)
 
 @Book.get("/search_book",status_code=status.HTTP_200_OK)
 def search_book(title:Optional[str]=Query(None),
