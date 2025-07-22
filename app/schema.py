@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import List
+
 
 class User(BaseModel):
     Fullname:str
@@ -25,7 +27,7 @@ class ResetPassword(Login):
 class BorrowBook(BaseModel):
     Google_id:str
     Title:str
-    Author:str
+    Author:List[str]
     Category:str
     
 
