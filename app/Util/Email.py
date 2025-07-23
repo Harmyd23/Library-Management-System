@@ -4,16 +4,15 @@ from email.utils import formataddr
 from fastapi.responses import JSONResponse
 from fastapi import status
 
-def send_email(code,receiver_email):
+def send_email(receiver_email,subject,message):
     my_email="abdulharmyd3@gmail.com"
     my_app_password="ughtbouqgtkdhpzl"
-
 
     msg=EmailMessage()
     msg["From"]=formataddr(("Libraconnect",my_email))
     msg["To"]=receiver_email
-    msg["subject"]="Password reset"
-    msg.set_content(f"Here is your reset code {code},This code will expire in 1 minute")
+    msg["subject"]=subject
+    msg.set_content(message)
 
     with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
         try:

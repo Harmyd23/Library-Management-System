@@ -41,7 +41,9 @@ def send_reset_code(request,db:Session):
 
     db.commit()
     try:
-        Send_email=Email.send_email(Otp_code,EMAIL)
+        subject="Password_reset"
+        message=f"Here is your reset code {Otp_code},This code will expire in 1 minute"
+        Send_email=Email.send_email(EMAIL,subject,message)
         print(f"sending email to {Email} with code {Otp_code}...")
     except Exception as e:
         if reset_code:

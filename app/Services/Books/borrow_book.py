@@ -14,6 +14,7 @@ def borrowBook(request,db:Session,user):
             content={"message":"Not authorized"}
         )
     #save in my books table if it is not in it
+    #first checking if the book is present
     book_check=db.query(Book).filter(Book.google_book_id==request.Google_id).first()
     if not book_check:
         req=requests.get(
@@ -69,6 +70,10 @@ def borrowBook(request,db:Session,user):
                  "due_date":recent_borrow.due_date.isoformat()
                  }
     )
+
+
+
+
 
 
 

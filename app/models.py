@@ -16,6 +16,8 @@ class User(Base):
     role=Column(String,default="Student")
     created_at=Column(DateTime,default=datetime.utcnow)
 
+    borrowed_books=Relationship("Borrowed_books",back_populates="user")
+
 class Password_reset(Base):
     __tablename__="reset_code"
     id=Column(Integer,primary_key=True,index=True)
@@ -45,6 +47,8 @@ class Borrowed_books(Base):
     borrow_date=Column(DateTime,default=datetime.utcnow)
     due_date=Column(DateTime)
     status=Column(String,default="Borrowed")
+
+    user=Relationship("User",back_populates="borrowed_books")
 
 
     

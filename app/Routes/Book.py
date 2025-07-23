@@ -2,7 +2,7 @@ from fastapi import APIRouter,status,Depends,Query
 from ..databases import Session,get_db
 from ..Util.oauth import decode_token
 from ..schema import BorrowBook
-from ..Services.Books import get_books,borrow_book
+from ..Services.Books import get_books,borrow_book,Get_borrowed_books
 from typing import Optional
 
 Book=APIRouter(prefix="/books")
@@ -22,3 +22,7 @@ def search_book(title:Optional[str]=Query(None),
                 user=Depends(decode_token),
                 db:Session=Depends(get_db)):
     return get_books.get_by_filter(title,author,genre,user,db)
+
+@Book.get("/get_borrowed_books",status_code=status.HTTP_200_OK)
+def get_borrowed_Books(db:Session=Depends(get_db),user=Depends(decode_token)):
+    return Get_borrowed_books.get_borrowed_books(db,user)
