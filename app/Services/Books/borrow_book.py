@@ -42,6 +42,14 @@ def borrowBook(request,db:Session,user):
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"message":"Book already borrowed"}
         )
+    #checking if the borrow limit has been reached
+    user_borrow_count=db.query(Borrowed_books).filter(Borrowed_books.user_id==userId,
+                                                      Borrowed_books.status=="Borrowed").count()
+    if user_borrow_count>10:
+        return JSONResponse(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            content={"message":"Borrow limit reached,return a book to borrow"}
+        )
     try:
         recent_borrow=Borrowed_books(
             user_id=userId,
@@ -67,7 +75,8 @@ def borrowBook(request,db:Session,user):
                  "id":recent_borrow.id,
                  "title":recent_borrow.title,
                  "author":recent_borrow.author,
-                 "due_date":recent_borrow.due_date.isoformat()
+                 "due_date":recent_borrow.due_date.isoformat(),
+                 "borrowed":True
                  }
     )
 
