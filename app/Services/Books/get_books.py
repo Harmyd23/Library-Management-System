@@ -55,6 +55,8 @@ def get_all(db:Session,user):
                 borrowed_count=db.query(Borrowed_books).filter(Borrowed_books.google_book_id==goog_book_id).count()
                 book_total_count=existing.copies
                 availability=book_total_count-borrowed_count
+                #checking if the user has borrowed any of the book in loop
+                borrowed=db.query(Borrowed_books).filter(Borrowed_books.google_book_id==goog_book_id,Borrowed_books.user_id==user_id).first() 
                 needed_attr.append({
                     "Google_book_id":goog_book_id,
                     "Category":category,
@@ -63,7 +65,8 @@ def get_all(db:Session,user):
                     "Publisher":volume_info.get("publisher"),
                     "Published_date":volume_info.get("publishedDate"),
                     "Description":volume_info.get("description"),
-                    "Availability":"Available" if availability > 0 else "Unavailable"
+                    "Availability":"Available" if availability > 0 else "Unavailable",
+                    "Borrowed":True if borrowed else False
                 })
             #store in the book dictionary, each with a key of its own category
             books[category]=needed_attr            
