@@ -7,9 +7,9 @@ from ...Services.Books import get_user_fav_cat
 from ...Util.config import Api_key
 
 
-def get_all(db:Session,user):
+async def get_all(db:Session,user):
     user_id=user["user_id"]
-    current_user=db.query(User).filter(User.id==user_id).first()
+    current_user=await db.query(User).filter(User.id==user_id).first()
     if not current_user:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -20,7 +20,7 @@ def get_all(db:Session,user):
         books={}
         # for each category in the user's favourite category
         for category in user_cat:
-            req=requests.get(
+            req= await requests.get(
                 "https://www.googleapis.com/books/v1/volumes",
                 timeout=5,
                 params={

@@ -7,7 +7,7 @@ from ..Util.hash import Hash
 from ..Util.Token import create_access_token
 from ..Util import Generate_user_id
 
-def signup(request,db:Session):
+async def signup(request,db:Session):
 
     fullname= request.Fullname.strip().lower()
     Email_validation=valid_email(request.Email.strip().lower())
@@ -22,7 +22,7 @@ def signup(request,db:Session):
     hashed_password=password_validation
 
     #check if email exists
-    email_Check=db.query(User).filter(User.email==email).first()
+    email_Check= db.query(User).filter(User.email==email).first()
     if email_Check:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
