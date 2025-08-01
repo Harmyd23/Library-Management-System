@@ -29,5 +29,8 @@ class BorrowBook(BaseModel):
     Title:str
     Author:List[str]
     Category:str
-    
+
+class ReturnBook(BorrowBook):
+    pass
+      
 

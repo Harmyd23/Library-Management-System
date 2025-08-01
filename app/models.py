@@ -47,6 +47,7 @@ class Borrowed_books(Base):
     borrow_date=Column(DateTime,default=datetime.utcnow)
     due_date=Column(DateTime)
     status=Column(String,default="Borrowed")
+    return_initiated_at=Column(DateTime,default=datetime.utcnow)
 
     user=Relationship("User",back_populates="borrowed_books")
 

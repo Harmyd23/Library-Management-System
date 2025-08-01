@@ -24,7 +24,7 @@ def get_borrowed_books(db:Session,user):
             "Title":book.title,
             "Author":book.author,
             "Category":book.category,
-            "due_date":book.due_date
+            "due_date":book.due_date.isoformat()
             })
     
         return JSONResponse(
