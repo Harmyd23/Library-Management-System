@@ -7,7 +7,7 @@ from ...Services.Books import get_user_fav_cat
 from ...Util.config import Api_key
 
 
-async def get_all(db:Session,user):
+def get_all(db:Session,user):
     user_id=user["user_id"]
     current_user=await db.query(User).filter(User.id==user_id).first()
     if not current_user:

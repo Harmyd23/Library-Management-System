@@ -7,7 +7,7 @@ from ..Util.hash import Hash
 from ..Util.Token import create_access_token
 from ..Util import Generate_user_id
 
-async def signup(request,db:Session):
+def signup(request,db:Session):
 
     fullname= request.Fullname.strip().lower()
     Email_validation=valid_email(request.Email.strip().lower())
