@@ -9,7 +9,7 @@ from ...Util.config import Api_key
 
 def get_all(db:Session,user):
     user_id=user["user_id"]
-    current_user=await db.query(User).filter(User.id==user_id).first()
+    current_user= db.query(User).filter(User.id==user_id).first()
     if not current_user:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
