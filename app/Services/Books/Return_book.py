@@ -29,10 +29,16 @@ def initiate_return(request,db:Session,user):
             else:
                 days_left=Time_remaining.days
                 Message=f"You still have {days_left} left, are you sure u want to return"
-                Email.send_email(receiver_email=email,subject="Did You Mean to Return This Book Early?",message=Message)
+                Email.send_email(receiver_email=email,subject="Did You Mean to Return This Book before Time?",message=Message)
     except Exception as e:
         db.rollback()
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"message":str(e)}
         )
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+                "message":"Return initiated. Check your email",
+                 }
+    )

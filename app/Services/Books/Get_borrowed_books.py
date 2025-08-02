@@ -11,7 +11,7 @@ def get_borrowed_books(db:Session,user):
             content={"message":"Not authorised"}
         )
     try:
-        borrowed_book=db.query(Borrowed_books).filter(Borrowed_books.user_id==user_id).all()
+        borrowed_book=db.query(Borrowed_books).filter(Borrowed_books.user_id==user_id,Borrowed_books.status.in_(["Borrowed","Overdue"])).all()
         if not borrowed_book:
             return JSONResponse(
                 status_code=status.HTTP_404_NOT_FOUND,

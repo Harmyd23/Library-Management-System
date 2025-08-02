@@ -20,7 +20,7 @@ async def get_all(db:Session,user):
         books={}
         # for each category in the user's favourite category
         for category in user_cat:
-            req= await requests.get(
+            req= requests.get(
                 "https://www.googleapis.com/books/v1/volumes",
                 timeout=5,
                 params={

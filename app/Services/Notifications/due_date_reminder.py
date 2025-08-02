@@ -9,7 +9,8 @@ from ...models import Borrowed_books,User
 from sqlalchemy import func
 
 def send_due_date_reminder(): 
-    db:Session=next(get_db())
+    db_gen=get_db()
+    db:Session=next(db_gen)
     closer_due=(datetime.utcnow()+ timedelta(days=3)).date()
     borrowed_books=db.query(Borrowed_books).filter(func.date(Borrowed_books.due_date)==closer_due).all()
     subject="Libraconnect Book Due Reminder"
