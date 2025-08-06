@@ -61,7 +61,7 @@ def login(request,db:Session):
     email=email_check
     #check if email exists
     user=db.query(User).filter(User.email==email).first()
-    if not User:
+    if not user:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"message":"Email does not exist"}
