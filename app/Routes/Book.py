@@ -29,4 +29,4 @@ def get_borrowed_Books(db:Session=Depends(get_db),user=Depends(decode_token)):
 
 @Book.post("/return_book",status_code=status.HTTP_200_OK)
 def return_book(request:ReturnBook,db:Session=Depends(get_db),user=Depends(decode_token)):
-    return Return_book(request,db,user)
+    return Return_book.initiate_return (request,db,user)
