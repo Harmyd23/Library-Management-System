@@ -30,7 +30,8 @@ class BorrowBook(BaseModel):
     Author:List[str]
     Category:str
 
-class ReturnBook(BorrowBook):
-    pass
+class ReturnBook(BaseModel):
+    Google_id:str
+     
       
 

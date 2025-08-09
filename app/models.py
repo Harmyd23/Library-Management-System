@@ -42,12 +42,12 @@ class Borrowed_books(Base):
     user_id=Column(ForeignKey("users.id"))
     google_book_id=Column(String,index=True)
     title=Column(String,index=True)
-    author=Column(String,index=True)
+    author= Column(ARRAY(String))
     category=Column(String,index=True)
     borrow_date=Column(DateTime,default=datetime.utcnow)
     due_date=Column(DateTime)
     status=Column(String,default="Borrowed")
-    return_initiated_at=Column(DateTime,default=datetime.utcnow)
+    return_initiated_at=Column(DateTime)
 
     user=Relationship("User",back_populates="borrowed_books")
 

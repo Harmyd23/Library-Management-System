@@ -25,6 +25,7 @@ app.include_router(Forgot_password.forgot_password)
 app.include_router(Auth.Auth)
 app.include_router(Book.Book)
 
+#Starting the app only when the script is run directly
 if "__name__"=="__main__":
     import uvicorn
     uvicorn.run(app,host="0.0.0.0",port=port)
