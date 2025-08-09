@@ -16,6 +16,11 @@ def initiate_return(request,db:Session,user):
         email=user["email"]
         user_name=user["user_name"]
         book=db.query(Borrowed_books).filter(Borrowed_books.google_book_id==request.Google_id,Borrowed_books.user_id==userId).first()
+        if not book:
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content={"message": "Book not found"}
+            )
         if book.status=="Borrowed" or book.status=="Overdue":
             now=datetime.utcnow()
             db_due_date=book.due_date
@@ -26,10 +31,11 @@ def initiate_return(request,db:Session,user):
                 Subject="Return Initiated"
                 MEssage=f"Dear {user_name},Go to the Library for Visual confirmation of the book"
                 Email.send_email(receiver_email=email,subject=Subject,message=MEssage)
-            else:
-                days_left=Time_remaining.days
-                Message=f"You still have {days_left} left, are you sure u want to return"
-                Email.send_email(receiver_email=email,subject="Did You Mean to Return This Book before Time?",message=Message)
+        else:
+            return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": "Book cannot be returned in its current status"}
+        )
     except Exception as e:
         db.rollback()
         return JSONResponse(
