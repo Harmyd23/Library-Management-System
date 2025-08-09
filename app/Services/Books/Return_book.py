@@ -10,7 +10,7 @@ def initiate_return(request,db:Session,user):
     if not userId:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            content={"message":"Not authorised"}
+            content={"message":"Not Authorised"}
         )
     try:
         email=user["email"]
@@ -24,13 +24,14 @@ def initiate_return(request,db:Session,user):
         if book.status=="Borrowed" or book.status=="Overdue":
             now=datetime.utcnow()
             db_due_date=book.due_date
-            Time_remaining:timedelta=db_due_date-now
-            if Time_remaining < timedelta(0):
-                book.status="Return_initiated"
-                db.commit()
-                Subject="Return Initiated"
-                MEssage=f"Dear {user_name},Go to the Library for Visual confirmation of the book"
-                Email.send_email(receiver_email=email,subject=Subject,message=MEssage)
+            #Time_remaining:timedelta=db_due_date-now
+            #if Time_remaining < timedelta(0):
+            book.return_initiated_at=datetime.now()
+            book.status="Return_initiated"
+            db.commit()
+            Subject="Return Initiated"
+            MEssage=f"Dear {user_name},Go to the Library for Visual confirmation of the book"
+            Email.send_email(receiver_email=email,subject=Subject,message=MEssage)
         else:
             return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -45,6 +46,6 @@ def initiate_return(request,db:Session,user):
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={
-                "message":"Return initiated. Check your email",
+                "message":"Return initiated.Check your email",
                  }
     )
