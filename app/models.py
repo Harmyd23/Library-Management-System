@@ -65,7 +65,7 @@ class Reservations(Base):
     reservation_expiry=Column(DateTime)
     status=Column(String,default="Active")
 
-    user=relationship("User",back_populates="Reservations")
+    user=relationship("User",back_populates="reservations")
     borrowed_books=relationship("Borrowed_books",back_populates="reservations")
     
     
