@@ -1,6 +1,6 @@
 from .databases import Base
 from sqlalchemy import String,Integer,ForeignKey,Column,DateTime
-from sqlalchemy.orm import Relationship
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import ARRAY
 
@@ -16,7 +16,10 @@ class User(Base):
     role=Column(String,default="Student")
     created_at=Column(DateTime,default=datetime.utcnow)
 
-    borrowed_books=Relationship("Borrowed_books",back_populates="user")
+    borrowed_books=relationship("Borrowed_books",back_populates="user")
+    reservations=relationship("Reservations",back_populates="user")
+
+
 
 class Password_reset(Base):
     __tablename__="reset_code"
@@ -49,7 +52,20 @@ class Borrowed_books(Base):
     status=Column(String,default="Borrowed")
     return_initiated_at=Column(DateTime)
 
-    user=Relationship("User",back_populates="borrowed_books")
+    user=relationship("User",back_populates="borrowed_books")
+    reservations=relationship("Reservations",back_populates="borrowed_books")
 
+class Reservations(Base):
+    __tablename__="Reservations"
+    id=Column(Integer,primary_key=True,index=True)
+    user_id=Column(Integer,ForeignKey("users.id"))
+    borrowed_book_id=Column(Integer,ForeignKey("Borrowed_books.id"))
+    email=Column(String,index=True)
+    reserved_at=Column(DateTime,default=datetime.utcnow())
+    reservation_expiry=Column(DateTime)
+    status=Column(String,default="Active")
 
+    user=relationship("User",back_populates="Reservations")
+    borrowed_books=relationship("Borrowed_books",back_populates="reservations")
+    
     
