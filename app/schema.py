@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import List
+from typing import List,Optional
 
 
 class User(BaseModel):
@@ -9,6 +9,16 @@ class User(BaseModel):
     Email:str
     Password:str
     Department:str
+
+class UserOut(BaseModel):
+    Full_name:str
+    Phone_number:str
+    Department:str
+    Email:str
+    profile_image:Optional[str]=None
+
+    class Config:
+        from_attributes=True
 
 class Login(BaseModel):
     Email:str
@@ -32,6 +42,22 @@ class BorrowBook(BaseModel):
 
 class ReturnBook(BaseModel):
     Google_id:str
+
+class UserOut(BaseModel):
+    Full_name:str
+    Matric_No:str
+    Department:str
+    Level:str
+    Email:str
+    profile_image:Optional[str]=None
+
+    class Config:
+        from_attributes=True
      
-      
+class Edit_user(BaseModel):
+    Full_name:Optional[str]=None
+    Matric_No:Optional[str]=None
+    Department:Optional[str]=None
+    Level:Optional[str]=None
+    Email:Optional[str]=None
 

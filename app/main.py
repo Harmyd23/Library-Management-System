@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .Routes import Forgot_password,Auth,Book
+from .Routes import Forgot_password,Auth,Book,User
 import os
 from .databases import Base,engine
 
@@ -24,6 +24,7 @@ def index():
 app.include_router(Forgot_password.forgot_password)
 app.include_router(Auth.Auth)
 app.include_router(Book.Book)
+app.include_router(User.user)
 
 #Starting the app only when the script is run directly
 if "__name__"=="__main__":
