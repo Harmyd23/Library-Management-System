@@ -11,7 +11,7 @@ from sqlalchemy import func
 def send_due_date_reminder(): 
     db_gen=get_db()
     db:Session=next(db_gen)
-    closer_due=(datetime.utcnow()+ timedelta(days=10)).date()
+    closer_due=(datetime.utcnow()+ timedelta(days=3)).date()
     borrowed_books=db.query(Borrowed_books).filter(func.date(Borrowed_books.due_date)==closer_due).all()
     subject="Libraconnect Book Due Reminder"
     for books in borrowed_books:
@@ -19,17 +19,15 @@ def send_due_date_reminder():
         #get user email
         user=db.query(User).filter(User.id==userId).first()
         email=user.email
-        message=f"Dear {user.fullname},the book{books.title} will be due in 3 days. Kindly return it to avoid fines"
+        message=f"Dear {user.fullname},the book {books.title} will be due in 3 days. Kindly return to avoid fines"
         send_email(email,subject,message)
     db.close()
 #save in db to persist job scheduling to avoid lost of jobs when the app restart
 jobstores={"default":SQLAlchemyJobStore(url=Database_url)}
 
-run_time = datetime.utcnow() + timedelta(minutes=10)
-
 scheduler=BackgroundScheduler(jobstores=jobstores)
-scheduler.add_job(send_due_date_reminder, "date", run_date=run_time)
-#scheduler.add_job(send_due_date_reminder,"cron",hour=8,minute=0)
+
+scheduler.add_job(send_due_date_reminder,"cron",hour=8,minute=0)
 #scheduler.start()
 
         
