@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .Routes import Forgot_password,Auth,Book,User
 import os
 from .databases import Base,engine
+from .Services.Notifications.due_date_reminder import scheduler
 
 
 app=FastAPI()
@@ -20,6 +21,12 @@ app.add_middleware(
 @app.get("/")
 def index():
     return {"message":"Library management system api"}
+
+@app.on_event("startup")
+def start_scheduler():
+    scheduler.start()
+    print(" Scheduler started")
+
 
 app.include_router(Forgot_password.forgot_password)
 app.include_router(Auth.Auth)
