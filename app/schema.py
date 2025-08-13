@@ -61,3 +61,15 @@ class Edit_user(BaseModel):
     Level:Optional[str]=None
     Email:Optional[str]=None
 
+
+class Admin(BaseModel):
+    Admin_name:str
+    Email:str
+    Phone_number:str
+    Password:str
+
+class AdminLogin(Login):
+    pass
+
+
+#09169081780

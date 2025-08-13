@@ -54,7 +54,6 @@ def signup(request,db:Session):
 
 
 def login(request,db:Session):
-
     email_check=valid_email(request.Email.strip().lower())
     if isinstance(email_check,JSONResponse):
         return email_check

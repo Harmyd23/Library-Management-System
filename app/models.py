@@ -7,18 +7,17 @@ from sqlalchemy.dialects.postgresql import ARRAY
 class User(Base):
     __tablename__="users"
     id=Column(Integer,primary_key=True,index=True)
-    user_id=Column(String)
+    user_id=Column(String,nullable=True)
     fullname=Column(String)
     phone_number=Column(String)
     email=Column(String)
-    department=Column(String)
+    department=Column(String,nullable=True)
     password=Column(String)
     role=Column(String,default="Student")
     created_at=Column(DateTime,default=datetime.utcnow)
 
     borrowed_books=relationship("Borrowed_books",back_populates="user")
     reservations=relationship("Reservations",back_populates="user")
-
 
 
 class Password_reset(Base):
