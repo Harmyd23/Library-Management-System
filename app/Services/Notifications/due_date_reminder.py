@@ -30,6 +30,6 @@ run_time = datetime.utcnow() + timedelta(minutes=10)
 scheduler=BackgroundScheduler(jobstores=jobstores)
 scheduler.add_job(send_due_date_reminder, "date", run_date=run_time)
 #scheduler.add_job(send_due_date_reminder,"cron",hour=8,minute=0)
-scheduler.start()
+#scheduler.start()
 
         
