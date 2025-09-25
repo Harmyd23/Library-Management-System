@@ -13,6 +13,7 @@ port = int(os.environ.get("PORT","8000"))
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://libra-connect-app.vercel.app",
+                    "https://libra-connect.vercel.app",
                     "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
